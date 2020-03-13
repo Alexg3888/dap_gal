@@ -24,7 +24,7 @@ import com.google.api.services.gmail.model.Message;
  *
  */
 @Service
-public class GmailService {
+public class GmailServiceImpl implements GmailService {
 
     /**
      *
@@ -32,8 +32,8 @@ public class GmailService {
      * @throws GeneralSecurityException 
      * @throws IOException 
      */
-    public Integer index(String userKeyName6) throws IOException, GeneralSecurityException {
-        return getNbUnreadEmails(userKeyName6);
+    public Integer index(String userKey) throws IOException, GeneralSecurityException {
+        return getNbUnreadEmails(userKey);
     }
 
     /**
@@ -70,13 +70,13 @@ public class GmailService {
      * @throws GeneralSecurityException.
      * @throws IOException.
      */
-    private Gmail getService(String userKeyName2) throws GeneralSecurityException, IOException {
+    private Gmail getService(String userKey) throws GeneralSecurityException, IOException {
 
         LOG.debug("Début du GmailService.getService");
 
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        Gmail service = new Gmail.Builder(httpTransport, JSON_FACTORY,
-                Utils.getCredentials(httpTransport, userKeyName2)).setApplicationName(APPLICATION_NAME).build();
+        Gmail service = new Gmail.Builder(httpTransport, JSON_FACTORY, Utils.getCredentials(httpTransport, userKey))
+                .setApplicationName(APPLICATION_NAME).build();
         return service;
     }
 
@@ -86,14 +86,14 @@ public class GmailService {
      * @throws IOException.
      * @throws GeneralSecurityException.
      */
-    public String getLabels(String userKeyName3) throws IOException, GeneralSecurityException {
+    public String getLabels(String userKey) throws IOException, GeneralSecurityException {
 
         LOG.info("Récupération des labels Gmail de l'utilisateur");
 
         String user = "me";
         String allLabels1 = "";
 
-        ListLabelsResponse listResponse = getService(userKeyName3).users().labels().list(user).execute();
+        ListLabelsResponse listResponse = getService(userKey).users().labels().list(user).execute();
         List<Label> labels = listResponse.getLabels();
         if (labels.isEmpty()) {
             allLabels1 = "Pas de Labels trouvés";
@@ -115,21 +115,25 @@ public class GmailService {
      * @throws IOException.
      * @throws GeneralSecurityException.
      */
-    public Integer getNbUnreadEmails(String userKeyName4) throws IOException, GeneralSecurityException {
+    @Override
+    public Integer getNbUnreadEmails(String userKey) throws IOException, GeneralSecurityException {
 
-        LOG.info("Récupération du nombre d'emails de l'utilisateur");
+        LOG.info("Récupération du nombre d'emails de l'utilisateur : " + userKey);
 
         String user = "me";
         Integer result = 0;
 
-        ListMessagesResponse allMessages = getService(userKeyName4).users().messages().list(user)
-                .setQ("in:inbox is:unread").execute();
+        ListMessagesResponse allMessages = getService(userKey).users().messages().list(user).setQ("in:inbox is:unread")
+                .execute();
         List<Message> messages = allMessages.getMessages();
         if (messages != null) { // si la liste n'est pas nul
             if (!messages.isEmpty()) { // si la liste de message n'est pas vide (! = n'est pas)
                 result = messages.size();
             }
         }
+
+        LOG.info("nombre de messages : " + messages.size());
+
         return result;
 
     }

@@ -35,20 +35,16 @@ public class Utils {
 
     /** The default JsonFactory.*/
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    /**
-     * 
-     */
-    private static final String TOKENS_DIRECTORY_PATH = System.getProperty("user.home") + "\\dap\\tokens";
+
+    private static final String TOKENS_DIRECTORY_PATH = System.getProperty("user.home") + "\\House_of_Code\\dap\\tokens";
+
+    private static final String CREDENTIALS_FILE_PATH = System.getProperty("user.home") + "\\House_of_Code\\dap\\credentials.json";
 
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = new ArrayList<String>();
-    /**
-     * 
-     */
-    //    private static final String CREDENTIALS_FILE_PATH ;
 
     /**
      * Creates an authorized Credential object.
@@ -72,7 +68,7 @@ public class Utils {
         SCOPES.add(CalendarScopes.CALENDAR_READONLY);
         SCOPES.add(GmailScopes.GMAIL_READONLY);
 
-        File appClientSecretFile = new File(System.getProperty("user.home") + "\\dap\\credentials.json");
+        File appClientSecretFile = new File(CREDENTIALS_FILE_PATH);
         // Load client secrets.
         //        InputStream in = CalendarService.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         //        if (in == null) {

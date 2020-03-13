@@ -57,10 +57,10 @@ public class CalendarService {
      * @throws IOException.
      * @throws GeneralSecurityException.
      */
-    private Calendar getService(String userKeyName7) throws IOException, GeneralSecurityException {
+    private Calendar getService(String userKey) throws IOException, GeneralSecurityException {
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(httpTransport, JSON_FACTORY,
-                Utils.getCredentials(httpTransport, userKeyName7)).setApplicationName(APPLICATION_NAME).build();
+                Utils.getCredentials(httpTransport, userKey)).setApplicationName(APPLICATION_NAME).build();
         return service;
     }
 
@@ -70,14 +70,14 @@ public class CalendarService {
      * @throws IOException.
      * @throws GeneralSecurityException.
      */
-    public String getNextEvents(String userKeyName8) throws IOException, GeneralSecurityException {
+    public String getNextEvents(String userKey) throws IOException, GeneralSecurityException {
 
         LOG.info("Récupération du prochain évènement de l'utilisateur");
 
         String nextEvent1 = "";
 
         DateTime now = new DateTime(System.currentTimeMillis());
-        Events events = getService(userKeyName8).events().list("primary").setMaxResults(1).setTimeMin(now)
+        Events events = getService(userKey).events().list("primary").setMaxResults(1).setTimeMin(now)
                 .setOrderBy("startTime").setSingleEvents(true).execute();
         List<Event> items = events.getItems();
 

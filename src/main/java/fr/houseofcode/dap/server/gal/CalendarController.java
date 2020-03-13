@@ -21,9 +21,9 @@ public class CalendarController {
     private CalendarService calService;
 
     @RequestMapping("/calendar/nextevents")
-    public String displayNextEvents(@RequestParam("userKey") String userKey2)
+    public String displayNextEvents(@RequestParam("userKey") String userKey)
             throws IOException, GeneralSecurityException {
 
-        return calService.getNextEvents(userKey2);
+        return calService.getNextEvents(userKey);
     }
 }
